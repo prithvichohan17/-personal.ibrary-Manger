@@ -409,8 +409,3 @@ elif st.session_state.currend_view =="stats":
                 st.markdown(f"**{author}**:{count}book{'s'if count> 1 else ''}")
 st.markdown("---")
 st.markdown("😎Copyrigth @ 2025 Prithvi kishan personal library Manager",unsafe_allow_html =True)
-
-
-
-
-    
