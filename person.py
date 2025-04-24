@@ -44,10 +44,11 @@ st.markdown("""
             border-left: 5px solid #10B981,
             border-radius: 0.375rem
             
-            }
-            .warning-message {
+        }
+        .warning-message {
             padding:1rem,
             background-color: #FE3C7,
+            border-left: 5px solid #F59E0B;
             border-left:5px solid #F59E0B,
         }
         .book-card {
@@ -58,6 +59,13 @@ st.markdown("""
             border-left: 5px solid #3B82F6,
             transtion: transfrom 0.3 ease,
         }
+        .read-badge, .unread-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+    }
         .book-card-hover {
             transofrm: translatey(-5px)
             box-shadow:0 10px 15px -3px rgba(0,0,0,0,0.1),
@@ -308,10 +316,10 @@ if st.session_state.current_view == "add":
                 "Friction", "Non-friction","science","Technology","Fanstasy","Romance", "Poetry self-help","Art","Religion","History"
             ])
             read_status = st.radio("Read status",["Read","Unread"], horizontal= True)
-            read_bool = read_status == "Read"
-        submit_button = st.form_submit_button
+            read_book = read_status == "Read"
+        submit_button = st.form_submit_button("Add Book")
         if submit_button and title and author :
-            add_book(title, author, publication_year,genre,read_bool)
+            add_book(title, author, publication_year,genre,read_book)
 
     if st.session_state.book_added:
             st.markdown("<div class 'sucess-message> Book added sucwessfully!</div>",unsafe_all_html = True)
@@ -339,7 +347,7 @@ elif st.session_state.current_view == "library":
 """,unsafe_allow_html =True)
                 
                 col1,col2 = st.column(2)
-                with cols:
+                with col1:
                     if st.button(f"Remove",key=f"remove_{i}",use_container_width = True):
                         if remove_book(i):
                            st.reurn()
@@ -360,8 +368,8 @@ elif st.session_state.current_view == "search":
     search_term =st.text_input("Enter search term:")
 
     if st.button("Search",use_container_width=False):
-        if search_term :
-            with st.spinper("Searching..."):
+        if st.button("🔍 Search"):
+            with st.spinner("Searching..."):
                 time.sleep(0.5)
                 search_books(search_term,search_by)
 
@@ -381,8 +389,6 @@ elif st.session_state.current_view == "search":
                             }</span></p>
                             </div>    
 
-
-
 """,unsafe_allow_html=True)
         elif search_term:
             st.markdown("<div class ='warning-message'>No books found matching your search.</div>",unsafe_allow_html = True)
@@ -390,7 +396,7 @@ elif st.session_state.current_view == "search":
 elif st.session_state.currend_view =="stats":
     st.markdown("<h2 class ='sub-header'>library statistics</h2>",unsafe_allow_html= True)
     if not st.session_state.library:
-        st.markdown("<div class='warning message'> Your library is empty.Add some books to se")
+        st.warning("📭 Your library is empty.")
     else:
         stats = get_library_stats()
         col1,col2, col3 = st.columns(3)
